@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心脏病风险预测 · 数据分析项目展示</title>
+<style>
+  :root{
+    --primary:#c0392b; --primary-dark:#96281b; --ink:#2c3e50; --muted:#7f8c8d;
+    --bg:#f7f9fb; --card:#ffffff; --blue:#2980b9; --green:#27ae60; --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+  header{background:linear-gradient(135deg,#2c3e50 0%,#34495e 55%,#96281b 100%);color:#fff;padding:72px 24px 56px;text-align:center}
+  header h1{font-size:2.4rem;letter-spacing:.5px}
+  header p.sub{opacity:.85;margin-top:10px;font-size:1.05rem}
+  .badges{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .badge{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:6px 16px;border-radius:999px;font-size:.85rem}
+  main{max-width:1100px;margin:0 auto;padding:40px 20px 80px}
+  section{margin-bottom:56px}
+  h2{font-size:1.5rem;display:flex;align-items:center;gap:10px;margin-bottom:20px}
+  h2::before{content:"";width:6px;height:26px;background:var(--primary);border-radius:3px;display:inline-block}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+  .kpi{background:var(--card);border-radius:var(--radius);padding:22px;text-align:center;box-shadow:0 3px 14px rgba(0,0,0,.06);transition:transform .2s}
+  .kpi:hover{transform:translateY(-4px)}
+  .kpi .num{font-size:2rem;font-weight:700;color:var(--primary)}
+  .kpi .lbl{color:var(--muted);font-size:.9rem;margin-top:4px}
+  .pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:8px}
+  .step{background:var(--card);border-radius:var(--radius);padding:18px 14px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.05);position:relative}
+  .step .icon{font-size:1.6rem}
+  .step b{display:block;margin:6px 0 4px}
+  .step span{font-size:.82rem;color:var(--muted)}
+  .card{background:var(--card);border-radius:var(--radius);padding:24px 28px;box-shadow:0 3px 14px rgba(0,0,0,.06)}
+  table{width:100%;border-collapse:collapse;font-size:.95rem}
+  th,td{padding:10px 12px;text-align:center;border-bottom:1px solid #eef1f4}
+  thead th{background:#f4f6f8;color:var(--ink)}
+  tr:hover td{background:#fbfcfd}
+  .best td{background:#fdf3f2;font-weight:600}
+  .tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.78rem}
+  .tag.sig{background:#fdecea;color:var(--primary)}
+  .tag.ns{background:#eef1f4;color:var(--muted)}
+  .bar-row{display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:12px;margin:10px 0}
+  .bar-track{background:#eef1f4;border-radius:999px;height:14px;overflow:hidden}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--green));border-radius:999px;animation:grow 1.2s ease}
+  @keyframes grow{from{width:0}}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+  .fig{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:0 3px 14px rgba(0,0,0,.06);transition:transform .2s}
+  .fig:hover{transform:translateY(-4px)}
+  .fig img{width:100%;display:block}
+  .fig figcaption{padding:12px 16px;font-size:.88rem;color:var(--muted)}
+  .concl{border-left:5px solid var(--green)}
+  .concl li{margin:8px 0}
+  footer{background:var(--ink);color:#cfd8dc;text-align:center;padding:28px;font-size:.85rem}
+  .btn{display:inline-block;margin-top:16px;background:var(--primary);color:#fff;padding:10px 26px;border-radius:999px;text-decoration:none;font-weight:600;transition:background .2s}
+  .btn:hover{background:var(--primary-dark)}
+  @media(max-width:640px){header h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🫀 心脏病风险预测</h1>
+  <p class="sub">基于 UCI 克利夫兰临床数据集的全流程数据分析项目</p>
+  <div class="badges">
+    <span class="badge">📊 数据读取</span><span class="badge">🧹 预处理</span>
+    <span class="badge">📐 统计检验</span><span class="badge">🤖 机器学习建模</span>
+    <span class="badge">📈 评估可视化</span><span class="badge">🌐 网页展示</span>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <h2>核心结果速览</h2>
+    <div class="kpis">
+      <div class="kpi"><div class="num">303</div><div class="lbl">临床样本量</div></div>
+      <div class="kpi"><div class="num">25</div><div class="lbl">编码后特征数</div></div>
+      <div class="kpi"><div class="num">0.968</div><div class="lbl">最佳模型 AUC</div></div>
+      <div class="kpi"><div class="num">88.5%</div><div class="lbl">准确率</div></div>
+      <div class="kpi"><div class="num">92.9%</div><div class="lbl">召回率（筛查漏诊少）</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>项目流程</h2>
+    <div class="pipeline">
+      <div class="step"><div class="icon">📥</div><b>数据读取</b><span>UCI 公开心脏病数据库<br>303×14</span></div>
+      <div class="step"><div class="icon">🧹</div><b>预处理</b><span>缺失值填补 / 独热编码<br>标准化 / 分层划分</span></div>
+      <div class="step"><div class="icon">📐</div><b>统计分析</b><span>t 检验 / 卡方检验<br>Spearman 相关</span></div>
+      <div class="step"><div class="icon">🤖</div><b>建模</b><span>逻辑回归 / 随机森林<br>梯度提升 / SVM</span></div>
+      <div class="step"><div class="icon">📈</div><b>评估可视化</b><span>ROC / PR / 混淆矩阵<br>特征重要性</span></div>
+      <div class="step"><div class="icon">🌐</div><b>展示</b><span>网页报告 + LaTeX PDF</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>数据概况与预处理</h2>
+    <div class="card">
+      <p>数据来自 <b>UCI 机器学习数据库 · Heart Disease (Cleveland)</b>，含 303 例临床记录、14 个字段。
+      目标变量按临床惯例二值化：<b>患病 139 例（45.9%）</b>，无病 164 例（54.1%）。</p>
+      <p style="margin-top:10px">关键预处理步骤：</p>
+      <ul style="margin:8px 0 0 20px">
+        <li><b>缺失值</b>：ca 缺 4 例、thal 缺 2 例（以 "?" 记录），采用众数填补；</li>
+        <li><b>异常值</b>：连续变量 |z|&gt;3 共 9 例，均属真实临床范围，予以保留；</li>
+        <li><b>编码</b>：cp/restecg/slope/ca/thal 独热编码，特征数 13 → 25；</li>
+        <li><b>标准化</b>：连续变量在训练集上拟合 StandardScaler，防止数据泄漏；</li>
+        <li><b>划分</b>：分层抽样 80/20（训练 242 / 测试 61），随机种子 42。</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>统计分析结论</h2>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>变量</th><th>检验方法</th><th>统计量</th><th>p 值</th><th>结论</th></tr></thead>
+        <tbody>
+          <tr><td>thalach 最大心率</td><td>t 检验</td><td>t=7.96</td><td>3.5×10⁻¹⁴</td><td><span class="tag sig">极显著↓</span></td></tr>
+          <tr><td>oldpeak ST 段压低</td><td>t 检验</td><td>t=−8.13</td><td>1.1×10⁻¹⁴</td><td><span class="tag sig">极显著↑</span></td></tr>
+          <tr><td>age 年龄</td><td>t 检验</td><td>t=−3.97</td><td>9.0×10⁻⁵</td><td><span class="tag sig">极显著↑</span></td></tr>
+          <tr><td>thal 铊扫描</td><td>卡方检验</td><td>χ²=82.69</td><td>1.1×10⁻¹⁸</td><td><span class="tag sig">极显著</span></td></tr>
+          <tr><td>cp 胸痛类型</td><td>卡方检验</td><td>χ²=81.82</td><td>1.3×10⁻¹⁷</td><td><span class="tag sig">极显著</span></td></tr>
+          <tr><td>ca 血管数</td><td>卡方检验</td><td>χ²=72.62</td><td>1.2×10⁻¹⁵</td><td><span class="tag sig">极显著</span></td></tr>
+          <tr><td>exang 运动心绞痛</td><td>卡方检验</td><td>χ²=54.69</td><td>1.4×10⁻¹³</td><td><span class="tag sig">极显著</span></td></tr>
+          <tr><td>chol 总胆固醇</td><td>t 检验</td><td>t=−1.48</td><td>0.139</td><td><span class="tag ns">不显著</span></td></tr>
+          <tr><td>fbs 空腹血糖</td><td>卡方检验</td><td>χ²=0.08</td><td>0.781</td><td><span class="tag ns">不显著</span></td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;font-size:.9rem;color:var(--muted)">患病组年龄更大、血压更高、最大心率更低、ST 段压更严重；性别、胸痛类型、心电图等 7 个分类变量均显著相关。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>模型性能对比（测试集 n=61）</h2>
+    <div class="card" style="overflow-x:auto">
+      <table>
+        <thead><tr><th>模型</th><th>准确率</th><th>精确率</th><th>召回率</th><th>F1</th><th>AUC（测试）</th><th>AUC（5折CV）</th></tr></thead>
+        <tbody>
+          <tr class="best"><td>🏆 逻辑回归</td><td>0.885</td><td>0.839</td><td>0.929</td><td>0.881</td><td><b>0.968</b></td><td>0.904 ± 0.013</td></tr>
+          <tr><td>支持向量机</td><td>0.885</td><td>0.839</td><td>0.929</td><td>0.881</td><td>0.963</td><td>0.885 ± 0.021</td></tr>
+          <tr><td>梯度提升</td><td>0.885</td><td>0.839</td><td>0.929</td><td>0.881</td><td>0.952</td><td>0.860 ± 0.017</td></tr>
+          <tr><td>随机森林</td><td>0.885</td><td>0.839</td><td>0.929</td><td>0.881</td><td>0.948</td><td>0.893 ± 0.028</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-top:18px">
+      <b>随机森林特征重要性 Top 6</b>
+      <div style="margin-top:8px">
+        <div class="bar-row"><span>thal（铊扫描）</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span>0.111</span></div>
+        <div class="bar-row"><span>cp（胸痛类型）</span><div class="bar-track"><div class="bar-fill" style="width:93%"></div></div><span>0.103</span></div>
+        <div class="bar-row"><span>thal_7</span><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div><span>0.095</span></div>
+        <div class="bar-row"><span>thalach（最大心率）</span><div class="bar-track"><div class="bar-fill" style="width:84%"></div></div><span>0.093</span></div>
+        <div class="bar-row"><span>ca（血管数）</span><div class="bar-track"><div class="bar-fill" style="width:81%"></div></div><span>0.090</span></div>
+        <div class="bar-row"><span>oldpeak（ST 压低）</span><div class="bar-track"><div class="bar-fill" style="width:71%"></div></div><span>0.079</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>可视化图集</h2>
+    <div class="gallery">
+      <figure class="fig"><img src="figures/fig5_roc.png" alt="ROC曲线"><figcaption><b>ROC 曲线对比</b> —— 逻辑回归 AUC 最高达 0.968。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig6_cm.png" alt="混淆矩阵"><figcaption><b>混淆矩阵</b> —— 61 例测试样本仅 7 例误判。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig9_model_bar.png" alt="模型对比"><figcaption><b>模型性能条形图</b> —— 四模型多指标对比。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig2_boxplots.png" alt="箱线图"><figcaption><b>连续变量箱线图</b> —— thalach 与 oldpeak 组间差异直观。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig3_corr.png" alt="相关热力图"><figcaption><b>Spearman 相关热力图</b> —— oldpeak 正相关、thalach 负相关。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig7_importance.png" alt="特征重要性"><figcaption><b>特征重要性 Top 10</b> —— 与统计检验结论一致。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig1_distribution.png" alt="分布图"><figcaption><b>目标与年龄分布</b> —— 患病组年龄明显偏高。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig4_cat_rates.png" alt="患病率"><figcaption><b>显著分类变量患病率</b> —— 虚线为总体患病率 45.9%。</figcaption></figure>
+      <figure class="fig"><img src="figures/fig8_pr.png" alt="PR曲线"><figcaption><b>精确率-召回率曲线</b> —— 筛查场景高召回优先。</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>讨论与结论</h2>
+    <div class="card concl">
+      <ul>
+        <li>在中小样本临床表格数据上，<b>可解释的逻辑回归不逊于复杂集成模型</b>（AUC 0.968，CV 最稳），利于临床落地与沟通；</li>
+        <li>最大心率（负向）、ST 段压低（正向）、胸痛类型、铊扫描与血管数是最强预测因子，与心血管临床知识吻合；</li>
+        <li>高召回率（92.9%）意味着低漏诊率，适合作为<b>辅助筛查工具</b>；</li>
+        <li>局限：单中心数据、测试集较小、未做外部验证；后续可引入 Hungarian/VA 队列做外部验证，并补充校准曲线与决策曲线分析（DCA）。</li>
+      </ul>
+      <a class="btn" href="../report/report.pdf" download>📄 下载完整 LaTeX 报告（PDF）</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  数据分析全流程项目 · 数据来源：UCI Machine Learning Repository — Heart Disease Data Set (Cleveland)<br>
+  Python · pandas · scikit-learn · matplotlib · LaTeX (XeLaTeX) · 2026
+</footer>
+
+</body>
+</html>
